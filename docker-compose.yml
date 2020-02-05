@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  kryptos:
+    container_name: excelplay-backend-kryptos
+    build:
+      context: ./excelplay-backend-kryptos/
+      dockerfile: dev.dockerfile
+    volumes:
+      - ./excelplay-backend-kryptos/:/excelplay-backend-kryptos
+    ports:
+      - "8000:8000"
