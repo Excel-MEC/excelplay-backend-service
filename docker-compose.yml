@@ -7,24 +7,48 @@ services:
       context: ./excelplay-backend-kryptos/
       dockerfile: dev.dockerfile
     volumes:
-      - ./excelplay-backend-kryptos/:/excelplay-backend-kryptos
+      - ./excelplay-backend-kryptos/:/go/src/github.com/Excel-MEC/excelplay-backend-kryptos
     ports:
-      - "8000:8000"
+      - "8080:8080"
+    restart: on-failure
+    networks:
+      - kryptos_network
     depends_on:
       - db
 
   db:
     image: postgres:latest
-    container_name: excelplay_db
-    restart: always
+    container_name: kryptos_db
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - DATABASE_HOST=${DB_HOST}
     ports:
       - "5432:5432"
-    environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=db
+    networks:
+      - kryptos_network
+    restart: unless-stopped
     volumes:
-      - pgdata:/var/lib/postgres/data
+      - pgdata:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_container
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    depends_on:
+      - db
+    ports:
+      - "5050:80"
+    networks:
+      - kryptos_network
+    restart: unless-stopped
 
 volumes:
   pgdata:
+
+networks:
+  kryptos_network:
+    driver: bridge`
