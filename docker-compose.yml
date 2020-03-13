@@ -51,4 +51,4 @@ volumes:
 
 networks:
   kryptos_network:
-    driver: bridge`
+    driver: bridge
