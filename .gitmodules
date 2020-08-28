@@ -1,9 +1,9 @@
 [submodule "excelplay-backend-dalalbull"]
 	path = excelplay-backend-dalalbull
-	url = https://gitlab.com/excel-mec/excelplay-backend-kryptos
+	url = https://github.com/excel-mec/excelplay-backend-kryptos
 [submodule "excelplay-backend-kryptos"]
 	path = excelplay-backend-kryptos
-	url = https://gitlab.com/excel-mec/excelplay-backend-dalalbull
+	url = https://github.com/excel-mec/excelplay-backend-dalalbull
 [submodule "excelplay-frontend"]
 	path = excelplay-frontend
 	url = git@gitlab.com:excel-mec/excelplay/excelplay-frontend.git
