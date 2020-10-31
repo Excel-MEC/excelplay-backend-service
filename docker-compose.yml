@@ -1,50 +1,45 @@
 version: "3"
 
 services:
-  frontend:
-    container_name: excelplay-frontend
-    build:
-      context: ./excelplay-frontend
-      dockerfile: dev.dockerfile
-    volumes:
-      - ./excelplay-frontend/:/excelplay-frontend
-      - /excelplay-frontend/node_modules
-    ports:
-      - "3000:3000"
-    restart: on-failure
-    depends_on:
-      - kryptos
+  # frontend:
+  #   container_name: excelplay-frontend
+  #   build:
+  #     context: ./excelplay-frontend
+  #     dockerfile: dev.dockerfile
+  #   volumes:
+  #     - ./excelplay-frontend/:/excelplay-frontend
+  #     - /excelplay-frontend/node_modules
+  #   ports:
+  #     - "3000:3000"
+  #   restart: on-failure
+  #   depends_on:
+  #     - kryptos
 
   kryptos:
     container_name: excelplay-backend-kryptos
     build:
       context: ./excelplay-backend-kryptos/
-      dockerfile: dev.dockerfile
-    volumes:
-      - ./excelplay-backend-kryptos/:/go/src/github.com/Excel-MEC/excelplay-backend-kryptos
+      dockerfile: prod.dockerfile
+    dns:
+      - 8.8.8.8
     ports:
       - "8080:8080"
     restart: on-failure
     networks:
       - kryptos_network
-    depends_on:
-      - db
 
-  db:
-    image: postgres:latest
-    container_name: kryptos_db
-    environment:
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
-      - DATABASE_HOST=${DB_HOST}
-    ports:
-      - "5432:5432"
-    networks:
-      - kryptos_network
-    restart: unless-stopped
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+  # dalalbull:
+  #   container_name: excelplay-backend-dalalbull
+  #   build:
+  #     context: ./excelplay-backend-dalalbull/
+  #     dockerfile: prod.dockerfile
+  #   dns:
+  #     - 8.8.8.8
+  #   ports:
+  #     - "8080:8080"
+  #   restart: on-failure
+  #   networks:
+  #     - kryptos_network
 
   pgadmin:
     image: dpage/pgadmin4
@@ -52,16 +47,11 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-    depends_on:
-      - db
     ports:
       - "5050:80"
     networks:
       - kryptos_network
     restart: unless-stopped
-
-volumes:
-  pgdata:
 
 networks:
   kryptos_network:
