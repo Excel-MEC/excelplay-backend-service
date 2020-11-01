@@ -1,20 +1,6 @@
 version: "3"
 
 services:
-  # frontend:
-  #   container_name: excelplay-frontend
-  #   build:
-  #     context: ./excelplay-frontend
-  #     dockerfile: dev.dockerfile
-  #   volumes:
-  #     - ./excelplay-frontend/:/excelplay-frontend
-  #     - /excelplay-frontend/node_modules
-  #   ports:
-  #     - "3000:3000"
-  #   restart: on-failure
-  #   depends_on:
-  #     - kryptos
-
   kryptos:
     container_name: excelplay-backend-kryptos
     build:
