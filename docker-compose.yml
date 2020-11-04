@@ -8,8 +8,6 @@ services:
       - "80:80"
     volumes:
       - ./dev.nginx.conf:/etc/nginx/conf.d/default.conf
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
     restart: unless-stopped
     depends_on:
       - kryptos
@@ -28,17 +26,6 @@ services:
     restart: on-failure
     networks:
       - kryptos_network
-
-  certbot:
-    image: certbot/certbot
-    container_name: certbot
-    volumes:
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
-      - ../cert/:/var/www/html
-    depends_on:
-      - nginx
-    command: certonly --webroot --webroot-path=/var/www/html --email aswinganesh666@gmail.com --agree-tos --no-eff --force-renewal -d staging.play.excelmec.org
 
   # dalalbull:
   #   container_name: excelplay-backend-dalalbull
@@ -64,10 +51,6 @@ services:
   #   networks:
   #     - kryptos_network
   #   restart: unless-stopped
-
-volumes:
-  certbot-etc:
-  certbot-var:
 
 networks:
   kryptos_network:
