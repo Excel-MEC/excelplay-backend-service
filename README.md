@@ -20,18 +20,4 @@ PGAdmin can be used to manipulate the database manually and is available on `loc
 
 To use endpoints that require auth access, [create a JWT](http://jwtbuilder.jamiekurtz.com/) and pass it in the Authorization header in the format `Bearer <token>`. The `sub` field of the JWT must contain a valid `uuid`. This uuid must be that of a user already in the database.
 
-## Generating docs
-
-Swagger UI compatible docs are generated using [swaggo](https://github.com/swaggo/swag).
-
-Download and install the `swag` binary from that repository (typically by moving the binary to `/usr/local/go/bin/`), then from the root folder of either kryptos or dalalbull, run
-
-```shell
-$ swag init --generalInfo ../../cmd/excelplay-backend-kryptos/main.go --dir ./pkg/handlers --output ./cmd/excelplay-backend-kryptos/docs
-```
-
-This very specific command is required, because for some reason the file where swaggo looks for general info (which in this case, is the `main.go` file) is relative to the directory specified with the `--dir` option, but the output folder specified with the `--output` option is relative to the directory from which this command is executed. If the output docs folder is not in the same directory as `main.go`, further problems arise. The directory specified with the `--dir` option is the one containing the handlers for all the API endpoints.
-
-## Note on go modules
-
-This project uses go modules but includes vendored deps to support older go versions. A go version that supports go modules (>1.13 is recommended) is required to add new dependencies. Once a new dependency is added use `go mod vendor` to vendor the new dependency for people on older go versions.
+## For more documentation, see [Excel Docs](https://excel-mec.gitlab.io/docs/#/Play/Play-Intro)
