@@ -18,9 +18,11 @@ services:
     container_name: excelplay-backend-kryptos
     build:
       context: ./excelplay-backend-kryptos/
-      dockerfile: prod.dockerfile
+      dockerfile: dev.dockerfile
     dns:
       - 8.8.8.8
+    volumes:
+      - ./excelplay-backend-kryptos/:/excelplay-backend-kryptos
     ports:
       - "8080:8080"
     restart: on-failure
