@@ -1,0 +1,11 @@
+image: "python:3.6"
+
+stages:
+  - deploy
+
+deploy_to_staging:
+  stage: deploy
+  script:
+    - echo "THIS WORKS"
+  only:
+    - master
