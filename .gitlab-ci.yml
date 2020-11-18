@@ -7,5 +7,6 @@ deploy_to_staging:
   stage: deploy
   script:
     - echo "THIS WORKS"
+    - fab deploy
   only:
     - master
