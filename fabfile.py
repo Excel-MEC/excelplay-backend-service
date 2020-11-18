@@ -1,5 +1,3 @@
-import os
-
 from fabric.api import *
 
 PROJECT_BASE = "/home/excel/excelplay-backend-service/"
