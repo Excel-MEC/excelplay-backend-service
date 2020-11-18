@@ -7,6 +7,7 @@ deploy_to_staging:
   stage: deploy
   script:
     - echo "THIS WORKS"
+    - pip3 install fabric
     - fab deploy
   only:
     - master
