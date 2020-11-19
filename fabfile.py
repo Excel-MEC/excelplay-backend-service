@@ -1,11 +1,17 @@
-from fabric.api import *
+import os
+from fabric import Connection, task
 
 PROJECT_BASE = "/home/excel/excelplay-backend-service/"
 
-def deploy():
-    print("here")
-    with cd(PROJECT_BASE):
-        print("inside context manager")
-        # run("docker-compose down")
-        # run("git pull origin master --rebase")
-        # run("docker-compose -f prod.docker-compose.yml up --build")
+
+@task
+def deploy(ctx):
+    with Connection(
+        os.environ["HOST"],
+        user="excel",
+        connect_kwargs={"key_filename": os.environ["DEPLOY_KEY_FILE"]},
+    ) as c:
+        with c.cd(PROJECT_BASE):
+            c.run("docker-compose down")
+            c.run("git pull origin master --recurse-submodules --rebase")
+            c.run("docker-compose -f prod.docker-compose.yml up --build")
