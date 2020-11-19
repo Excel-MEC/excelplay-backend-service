@@ -6,6 +6,7 @@ stages:
 deploy_to_staging:
   stage: deploy
   script:
+    - pip3 uninstall fabric3
     - pip3 install fabric
     - fab deploy
   only:
