@@ -14,4 +14,4 @@ def deploy(ctx):
         with c.cd(PROJECT_BASE):
             c.run("docker-compose down")
             c.run("git pull origin master --recurse-submodules --rebase")
-            c.run("docker-compose -f prod.docker-compose.yml up --build")
+            c.run("docker-compose -f prod.docker-compose.yml up --build -d")
