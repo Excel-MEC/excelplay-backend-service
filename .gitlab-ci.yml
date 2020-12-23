@@ -3,7 +3,7 @@ image: "python:3.6"
 stages:
   - deploy
 
-deploy_to_staging:
+deploy_to_production:
   stage: deploy
   script:
     - pip3 install fabric

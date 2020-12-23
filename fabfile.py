@@ -1,14 +1,14 @@
 import os
 from fabric import Connection, task
 
-PROJECT_BASE = "/home/excel/excelplay-backend-service/"
+PROJECT_BASE = "/home/agz/excelplay-backend-service/"
 
 
 @task
 def deploy(ctx):
     with Connection(
         os.environ["HOST"],
-        user="excel",
+        user="agz",
         connect_kwargs={"key_filename": os.environ["DEPLOY_KEY_FILE"]},
     ) as c:
         with c.cd(PROJECT_BASE):
