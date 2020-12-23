@@ -30,7 +30,7 @@ services:
       - "8080:8080"
     restart: on-failure
     depends_on:
-      - kryptos_db
+      - db
     networks:
       - kryptos_network
 
@@ -47,7 +47,7 @@ services:
 
   db:
     image: postgres:latest
-    container_name: kryptos_db
+    container_name: db
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
@@ -57,6 +57,7 @@ services:
       - "5432:5432"
     volumes:
       - database_postgres:/var/lib/postgresql/data
+    restart: on-failure
     networks:
       - kryptos_network
 
@@ -75,7 +76,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4
-    container_name: pgadmin_container
+    container_name: pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
@@ -88,6 +89,7 @@ services:
 volumes:
   certbot-etc:
   certbot-var:
+  database_postgres:
 
 networks:
   kryptos_network:
