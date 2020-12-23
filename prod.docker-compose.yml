@@ -29,6 +29,8 @@ services:
     ports:
       - "8080:8080"
     restart: on-failure
+    depends_on:
+      - kryptos_db
     networks:
       - kryptos_network
 
@@ -41,7 +43,22 @@ services:
       - ../cert/:/var/www/html
     depends_on:
       - nginx
-    command: certonly --webroot --webroot-path=/var/www/html --email aswinganesh666@gmail.com --agree-tos --no-eff --force-renewal -d backend.play.excelmec.org
+    command: certonly --webroot --webroot-path=/var/www/html --email aswinganesh666@gmail.com --agree-tos --no-eff --force-renewal -d api.play.excelmec.org
+
+  db:
+    image: postgres:latest
+    container_name: kryptos_db
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - DATABASE_HOST=${DB_HOST}
+    ports:
+      - "5432:5432"
+    volumes:
+      - database_postgres:/var/lib/postgresql/data
+    networks:
+      - kryptos_network
 
   # dalalbull:
   #   container_name: excelplay-backend-dalalbull
@@ -56,17 +73,17 @@ services:
   #   networks:
   #     - kryptos_network
 
-  # pgadmin:
-  #   image: dpage/pgadmin4
-  #   container_name: pgadmin_container
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-  #     PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-  #   ports:
-  #     - "5050:80"
-  #   networks:
-  #     - kryptos_network
-  #   restart: unless-stopped
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_container
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "5050:80"
+    networks:
+      - kryptos_network
+    restart: unless-stopped
 
 volumes:
   certbot-etc:
