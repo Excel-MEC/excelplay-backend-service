@@ -7,3 +7,6 @@
 [submodule "excelplay-dalalbull"]
 	path = excelplay-dalalbull
 	url = https://github.com/Excel-MEC/excelplay-dalalbull
+[submodule "excelplay-auth"]
+	path = excelplay-auth
+	url = https://github.com/Excel-MEC/excelplay-auth
