@@ -46,7 +46,6 @@ services:
     build: ./excelplay-auth/excelplay_auth/.
     depends_on:
       - redis
-      - dbauth
     command: bash excelplay-auth/docker_entrypoint.sh
     volumes:
       - .:/excelplay/excelplay_auth
@@ -59,7 +58,6 @@ services:
     build: ./excelplay-dalalbull/excelplay_dalalbull/.
     depends_on:
       - redis
-      - db3
     command: bash excelplay-dalalbull/docker_entrypoint.sh
     volumes:
       - .:/excelplay/excelplay_dalalbull
@@ -98,6 +96,8 @@ services:
     command: redis-server
     volumes:
       - "redisdata:/data"
+    networks:
+      - kryptos_network
 
   # pgadmin:
   #   image: dpage/pgadmin4
