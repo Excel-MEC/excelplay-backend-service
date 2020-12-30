@@ -22,6 +22,7 @@ services:
       - auth1
     networks:
       - kryptos_network
+      - dalalbull_network
 
   kryptos:
     container_name: excelplay-backend-kryptos
