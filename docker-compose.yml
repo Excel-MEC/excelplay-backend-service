@@ -52,7 +52,7 @@ services:
     ports:
       - "8000:8000"
     networks:
-      - kryptos_network
+      - dalalbull_network
 
   dalalbull:
     build: ./excelplay-dalalbull/excelplay_dalalbull/.
@@ -64,7 +64,7 @@ services:
     ports:
       - "8002:8002"
     networks:
-      - kryptos_network
+      - dalalbull_network
 
   dalalbulldaphne:
     build: ./excelplay-dalalbull/excelplay_dalalbull/.
@@ -76,7 +76,7 @@ services:
     ports:
       - "8003:8003"
     networks:
-      - kryptos_network
+      - dalalbull_network
 
   dalalbullcelery:
     build: ./excelplay-dalalbull/excelplay_dalalbull/.
@@ -87,7 +87,7 @@ services:
     volumes:
       - .:/excelplay/excelplay_dalalbull
     networks:
-      - kryptos_network
+      - dalalbull_network
 
   redis:
     container_name: "redis"
@@ -97,7 +97,25 @@ services:
     volumes:
       - "redisdata:/data"
     networks:
-      - kryptos_network
+      - dalalbull_network
+
+  dbauth:
+    container_name: "dbauth"
+    restart: unless-stopped
+    image: postgres:alpine
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${DB_USER_AUTH}
+      - POSTGRES_PASSWORD=${DB_PASSWORD_AUTH}
+      - POSTGRES_DB=${DB_NAME_AUTH}
+      - DATABASE_HOST=${DB_HOST_AUTH}
+    networks:
+      - dalalbull_network
+    volumes:
+      - "pgdataauth:/var/lib/postgresql/data"
 
   # pgadmin:
   #   image: dpage/pgadmin4
@@ -114,6 +132,8 @@ services:
 networks:
   kryptos_network:
     driver: bridge
-
+  dalalbull_network:
+    driver: bridge
 volumes:
   redisdata:
+  pgdataauth:
