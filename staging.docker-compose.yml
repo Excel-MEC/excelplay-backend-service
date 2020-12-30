@@ -16,6 +16,10 @@ services:
     restart: unless-stopped
     depends_on:
       - kryptos
+      - dalalbull
+      - dalalbullcelery
+      - dalalbulldaphne
+      - auth1
     networks:
       - kryptos_network
 
@@ -29,8 +33,6 @@ services:
     ports:
       - "8080:8080"
     restart: on-failure
-    depends_on:
-      - db
     networks:
       - kryptos_network
 
@@ -62,6 +64,7 @@ services:
     build: ./excelplay-auth/excelplay_auth/.
     depends_on:
       - redis
+      - dbauth
     command: bash excelplay-auth/docker_entrypoint.sh
     volumes:
       - .:/excelplay/excelplay_auth
