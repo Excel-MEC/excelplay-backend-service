@@ -45,7 +45,7 @@ services:
       - ../cert/:/var/www/html
     depends_on:
       - nginx
-    command: certonly --webroot --webroot-path=/var/www/html --email aswinganesh666@gmail.com --agree-tos --no-eff --force-renewal -d staging.play.excelmec.org
+    command: certonly --webroot --webroot-path=/var/www/html --email aswinganesh666@gmail.com --agree-tos --no-eff --force-renewal -d backend.play.excelmec.org
 
   # dalalbull:
   #   container_name: excelplay-backend-dalalbull
