@@ -78,6 +78,7 @@ services:
     build: ./excelplay-dalalbull/excelplay_dalalbull/.
     depends_on:
       - redis
+      - dbdalalbull
     command: bash excelplay-dalalbull/docker_entrypoint.sh
     volumes:
       - .:/excelplay/excelplay_dalalbull
@@ -90,6 +91,7 @@ services:
     build: ./excelplay-dalalbull/excelplay_dalalbull/.
     depends_on:
       - dalalbull
+      - dbdalalbull
     command: bash excelplay-dalalbull/rundaphne.sh
     volumes:
       - .:/excelplay/excelplay_dalalbull
@@ -103,6 +105,7 @@ services:
     depends_on:
       - dalalbull
       - dalalbulldaphne
+      - dbdalalbull
     command: bash excelplay-dalalbull/runcelery.sh
     volumes:
       - .:/excelplay/excelplay_dalalbull
@@ -137,11 +140,30 @@ services:
     volumes:
       - "pgdataauth:/var/lib/postgresql/data"
 
+  dbdalalbull:
+    container_name: "dbdalalbull"
+    restart: unless-stopped
+    image: postgres:alpine
+    expose:
+      - "5432"
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_USER=${DB_USER_DBULL}
+      - POSTGRES_PASSWORD=${DB_PASSWORD_DBULL}
+      - POSTGRES_DB=${DB_NAME_DBULL}
+      - DATABASE_HOST=${DB_HOST_DBULL}
+    networks:
+      - dalalbull_network
+    volumes:
+      - "pgdatadbull:/var/lib/postgresql/data"
+
 volumes:
   certbot-etc:
   certbot-var:
   redisdata:
   pgdataauth:
+  pgdatadbull:
 
 networks:
   kryptos_network:
