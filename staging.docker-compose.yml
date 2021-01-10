@@ -1,33 +1,52 @@
 version: "3"
 
 services:
-  # nginx:
-  #   image: nginx:latest
-  #   container_name: excelplay-backend-nginx
-  #   ports:
-  #     - "80:80"
-  #   volumes:
-  #     - ./dev.nginx.conf:/etc/nginx/conf.d/default.conf
-  #   restart: unless-stopped
-  #   depends_on:
-  #     - kryptos
-  #   networks:
-  #     - kryptos_network
+  nginx:
+    image: nginx:latest
+    container_name: excelplay-backend-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./staging.nginx.conf:/etc/nginx/conf.d/default.conf
+      - ../cert/:/var/www/html
+      - ../cert/dhparam/:/etc/ssl/certs/
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+    restart: unless-stopped
+    depends_on:
+      - kryptos
+      - dalalbull
+      - dalalbullcelery
+      - dalalbulldaphne
+      - auth1
+    networks:
+      - kryptos_network
+      - dalalbull_network
 
-  # kryptos:
-  #   container_name: excelplay-backend-kryptos
-  #   build:
-  #     context: ./excelplay-backend-kryptos/
-  #     dockerfile: dev.dockerfile
-  #   dns:
-  #     - 8.8.8.8
-  #   volumes:
-  #     - ./excelplay-backend-kryptos/:/excelplay-backend-kryptos
-  #   ports:
-  #     - "8080:8080"
-  #   restart: on-failure
-  #   networks:
-  #     - kryptos_network
+  kryptos:
+    container_name: excelplay-backend-kryptos
+    build:
+      context: ./excelplay-backend-kryptos/
+      dockerfile: prod.dockerfile
+    dns:
+      - 8.8.8.8
+    ports:
+      - "8080:8080"
+    restart: on-failure
+    networks:
+      - kryptos_network
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - ../cert/:/var/www/html
+    depends_on:
+      - nginx
+    command: certonly --webroot --webroot-path=/var/www/html --email aswinganesh666@gmail.com --agree-tos --no-eff --force-renewal -d backend.play.excelmec.org
 
   # dalalbull:
   #   container_name: excelplay-backend-dalalbull
@@ -46,6 +65,7 @@ services:
     build: ./excelplay-auth/excelplay_auth/.
     depends_on:
       - redis
+      - dbauth
     command: bash excelplay-auth/docker_entrypoint.sh
     volumes:
       - .:/excelplay/excelplay_auth
@@ -58,6 +78,7 @@ services:
     build: ./excelplay-dalalbull/excelplay_dalalbull/.
     depends_on:
       - redis
+      - dbdalalbull
     command: bash excelplay-dalalbull/docker_entrypoint.sh
     volumes:
       - .:/excelplay/excelplay_dalalbull
@@ -70,6 +91,7 @@ services:
     build: ./excelplay-dalalbull/excelplay_dalalbull/.
     depends_on:
       - dalalbull
+      - dbdalalbull
     command: bash excelplay-dalalbull/rundaphne.sh
     volumes:
       - .:/excelplay/excelplay_dalalbull
@@ -83,6 +105,7 @@ services:
     depends_on:
       - dalalbull
       - dalalbulldaphne
+      - dbdalalbull
     command: bash excelplay-dalalbull/runcelery.sh
     volumes:
       - .:/excelplay/excelplay_dalalbull
@@ -117,23 +140,33 @@ services:
     volumes:
       - "pgdataauth:/var/lib/postgresql/data"
 
-  # pgadmin:
-  #   image: dpage/pgadmin4
-  #   container_name: pgadmin_container
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-  #     PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-  #   ports:
-  #     - "5050:80"
-  #   networks:
-  #     - kryptos_network
-  #   restart: unless-stopped
+  dbdalalbull:
+    container_name: "dbdalalbull"
+    restart: unless-stopped
+    image: postgres:alpine
+    expose:
+      - "5432"
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_USER=${DB_USER_DBULL}
+      - POSTGRES_PASSWORD=${DB_PASSWORD_DBULL}
+      - POSTGRES_DB=${DB_NAME_DBULL}
+      - DATABASE_HOST=${DB_HOST_DBULL}
+    networks:
+      - dalalbull_network
+    volumes:
+      - "pgdatadbull:/var/lib/postgresql/data"
+
+volumes:
+  certbot-etc:
+  certbot-var:
+  redisdata:
+  pgdataauth:
+  pgdatadbull:
 
 networks:
   kryptos_network:
     driver: bridge
   dalalbull_network:
     driver: bridge
-volumes:
-  redisdata:
-  pgdataauth:
