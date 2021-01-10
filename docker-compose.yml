@@ -42,6 +42,81 @@ services:
   #   networks:
   #     - kryptos_network
 
+  # auth1:
+  #   build: ./excelplay-auth/excelplay_auth/.
+  #   depends_on:
+  #     - redis
+  #   command: bash excelplay-auth/docker_entrypoint.sh
+  #   volumes:
+  #     - .:/excelplay/excelplay_auth
+  #   ports:
+  #     - "8000:8000"
+  #   networks:
+  #     - dalalbull_network
+
+  # dalalbull:
+  #   build: ./excelplay-dalalbull/excelplay_dalalbull/.
+  #   depends_on:
+  #     - redis
+  #   command: bash excelplay-dalalbull/docker_entrypoint.sh
+  #   volumes:
+  #     - .:/excelplay/excelplay_dalalbull
+  #   ports:
+  #     - "8002:8002"
+  #   networks:
+  #     - dalalbull_network
+
+  # dalalbulldaphne:
+  #   build: ./excelplay-dalalbull/excelplay_dalalbull/.
+  #   depends_on:
+  #     - dalalbull
+  #   command: bash excelplay-dalalbull/rundaphne.sh
+  #   volumes:
+  #     - .:/excelplay/excelplay_dalalbull
+  #   ports:
+  #     - "8003:8003"
+  #   networks:
+  #     - dalalbull_network
+
+  # dalalbullcelery:
+  #   build: ./excelplay-dalalbull/excelplay_dalalbull/.
+  #   depends_on:
+  #     - dalalbull
+  #     - dalalbulldaphne
+  #   command: bash excelplay-dalalbull/runcelery.sh
+  #   volumes:
+  #     - .:/excelplay/excelplay_dalalbull
+  #   networks:
+  #     - dalalbull_network
+
+  # redis:
+  #   container_name: "redis"
+  #   restart: unless-stopped
+  #   image: redis
+  #   command: redis-server
+  #   volumes:
+  #     - "redisdata:/data"
+  #   networks:
+  #     - dalalbull_network
+
+  # dbauth:
+  #   container_name: "dbauth"
+  #   restart: unless-stopped
+  #   image: postgres:alpine
+  #   expose:
+  #     - "5432"
+  #   ports:
+  #     - "5432:5432"
+  #   environment:
+  #     - POSTGRES_USER=${DB_USER_AUTH}
+  #     - POSTGRES_PASSWORD=${DB_PASSWORD_AUTH}
+  #     - POSTGRES_DB=${DB_NAME_AUTH}
+  #     - DATABASE_HOST=${DB_HOST_AUTH}
+  #   networks:
+  #     - dalalbull_network
+  #   volumes:
+  #     - "pgdataauth:/var/lib/postgresql/data"
+
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin_container
@@ -57,3 +132,8 @@ services:
 networks:
   kryptos_network:
     driver: bridge
+#   dalalbull_network:
+#     driver: bridge
+# volumes:
+#   redisdata:
+#   pgdataauth:
