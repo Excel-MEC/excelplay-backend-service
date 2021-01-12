@@ -159,7 +159,7 @@ services:
     expose:
       - "5432"
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       - POSTGRES_USER=${DB_USER_AUTH}
       - POSTGRES_PASSWORD=${DB_PASSWORD_AUTH}

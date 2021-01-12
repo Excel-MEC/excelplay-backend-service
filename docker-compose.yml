@@ -117,23 +117,23 @@ services:
   #   volumes:
   #     - "pgdataauth:/var/lib/postgresql/data"
 
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin_container
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-    ports:
-      - "5050:80"
-    networks:
-      - kryptos_network
-    restart: unless-stopped
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   container_name: pgadmin_container
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+  #     PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+  #   ports:
+  #     - "5050:80"
+  #   networks:
+  #     - kryptos_network
+  #   restart: unless-stopped
 
 networks:
-  kryptos_network:
+  # kryptos_network:
+  #   driver: bridge
+  dalalbull_network:
     driver: bridge
-#   dalalbull_network:
-#     driver: bridge
 # volumes:
 #   redisdata:
 #   pgdataauth:
